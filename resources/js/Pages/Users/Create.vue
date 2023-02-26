@@ -20,8 +20,9 @@
                    class="border border-gray-400 rounded-xl h-9 my-3 w-full"
                    name="name"
                    id="name"
-                   required
+
             >
+            <div v-if="$page.props.errors.name" v-text="$page.props.errors.name" class="text-red-500 text-xs mt-1"></div>
         </div>
         <div class="mb-6">
             <label class="bolck  uppercase font-bold text-xs text-gray-700"
@@ -35,8 +36,9 @@
                    class="border border-gray-400 rounded-xl h-9 my-3 w-full"
                    name="email"
                    id="email"
-                   required
+
             >
+            <div v-if="errors.email" v-text="$page.props.errors.email" class="text-red-500 text-xs mt-1"></div>
         </div>
         <div class="mb-6">
             <label class="bolck  uppercase font-bold text-xs text-gray-700"
@@ -50,13 +52,15 @@
                    class="border border-gray-400 rounded-xl h-9 my-3 w-full"
                    name="password"
                    id="password"
-                   required
+
             >
+            <div v-if="$page.props.errors.password" v-text="form.errors.password" class="text-red-500 text-xs mt-1"></div>
         </div>
         <div class="mb-6">
             <button
                 type="submit"
                 class="bg-blue-400 text-white rounded py-2 px-4 hover:bg-blue-500"
+                :disabled="form.processing"
             >
                 Submit
             </button>
@@ -72,17 +76,21 @@ export default {
 </script>
 
 <script setup>
-import { reactive } from "vue";
-import { Inertia } from "@inertiajs/inertia";
+import { useForm } from "@inertiajs/vue3";
 
-let form = reactive({
+let form = useForm({
     name: '',
     email: '',
     password: '',
 });
+
+
 let submit = () => {
-    Inertia.post('/users' , form);
+    form.post('/users');
 };
+defineProps({
+    errors: Object
+});
 </script>
 
 <style scoped>
